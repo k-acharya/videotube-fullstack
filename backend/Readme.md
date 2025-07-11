@@ -1,4 +1,4 @@
-#chai aur backend series Learning
+#Learning backend (huge thanks to chaiAURbackend by hitesh sir) 
 
-This is a video series on Backend with javaSCript
+link for model of backend we are building
  - [model link](https://app.eraser.io/workspace/Gu9mVdqHi5umVYvsMpfj?origin=share)
