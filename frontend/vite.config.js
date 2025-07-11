@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/api': 'http://localhost:8000'  // Proxy all /api requests to your backend
+      '/api': 'https://backend-videotube-oaq4.onrender.com'  // Proxy all /api requests to your backend
     }
   }
 })
