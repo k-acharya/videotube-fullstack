@@ -55,15 +55,7 @@ const getVideoComments = asyncHandler(async (req, res) => {
     const total = result[0]?.metadata[0]?.total || 0;
 
     return res.status(200).json(
-        new ApiResponse(200, {
-            comments,
-            pagination: {
-                total,
-                page: Number(page),
-                limit: Number(limit),
-                pages: Math.ceil(total / limit)
-            }
-        }, "Video comments fetched")
+        new ApiResponse(200, comments, "Video comments fetched")
     );
 
 })

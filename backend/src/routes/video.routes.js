@@ -12,10 +12,9 @@ import {upload} from "../middlewares/multer.middleware.js"
 
 const router = Router();
 
-//  Public route — visible to all users
+//  Public routes — visible to all users
 router.get("/publishvideo", getAllVideos);
-
-router.route("/:videoId").get(getVideoById)  // should be public
+router.get("/:videoId", getVideoById);  // should be public
 
 //  Protected routes — require login
 router.use(verifyJWT);

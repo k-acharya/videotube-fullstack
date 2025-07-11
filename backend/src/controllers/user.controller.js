@@ -4,7 +4,7 @@ import { User } from "../models/user.model.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
-import mongoose from "mongoose";
+import mongoose, { isValidObjectId } from "mongoose";
 
 
 const generateAccessAndRefreshTokens = async(userId) => {
@@ -413,13 +413,7 @@ const getUserChannelProfile = asyncHandler(async(req, res) => {
                 channelSubscribedToCount: {
                     $size: "$subscribedTo"
                 },
-                isSubscribed : {
-                    $cond: {
-                        if: {$in: [req.user?._id, "$subscribers.subscriber"]},
-                        then: true,
-                        else: false
-                    }
-                }             
+                isSubscribed : false             
             }
         },
         {
@@ -459,48 +453,82 @@ const getWatchHistory = asyncHandler(async(req, res) => {
                 from: "videos",
                 localField: "watchHistory",
                 foreignField: "_id",
-                as: "watchHistory",
-                pipeline: [
-                    {
-                        $lookup: {
-                            from: "users",
-                            localField: "owner",
-                            foreignField: "_id",
-                            as: "owner",
-                            pipeline: [
-                                {
-                                    $project: {
-                                        fullName: 1,
-                                        username: 1,
-                                        avatar: 1
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    {
-                        $addFields: {
-                            owner: {
-                                $first: "$owner"
-                            }
-                        }
-                    }
-                ]
+                as: "watchHistory"
+            }
+        },
+        {
+            $unwind: "$watchHistory"
+        },
+        {
+            $lookup: {
+                from: "users",
+                localField: "watchHistory.owner",
+                foreignField: "_id",
+                as: "watchHistory.ownerDetails"
+            }
+        },
+        {
+            $addFields: {
+                "watchHistory.owner": {
+                    $first: "$watchHistory.ownerDetails"
+                }
+            }
+        },
+        {
+            $project: {
+                "watchHistory.ownerDetails": 0
+            }
+        },
+        {
+            $group: {
+                _id: null,
+                watchHistory: {
+                    $push: "$watchHistory"
+                }
             }
         }
     ]) 
+
+    console.log("Watch history aggregation result:", user);
 
     return res
     .status(200)
     .json(
         new ApiResponse(
             200,
-            user[0].getWatchHistory,
+            user[0]?.watchHistory || [],
             "watch history fetched successfully"
         )
     )
 })
 
+
+const addToWatchHistory = asyncHandler(async(req, res) => {
+    const { videoId } = req.params;
+
+    if (!isValidObjectId(videoId)) {
+        throw new ApiError(400, "Invalid video ID");
+    }
+
+    // Add video to user's watch history
+    const user = await User.findByIdAndUpdate(
+        req.user._id,
+        {
+            $addToSet: { watchHistory: videoId } // $addToSet prevents duplicates
+        },
+        { new: true }
+    ).select("-password");
+
+    if (!user) {
+        throw new ApiError(404, "User not found");
+    }
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200, user, "Video added to watch history")
+    );
+});
 
 
 export {
@@ -515,4 +543,5 @@ export {
     updateUserCoverImage,
     getUserChannelProfile,
     getWatchHistory,
+    addToWatchHistory,
 }

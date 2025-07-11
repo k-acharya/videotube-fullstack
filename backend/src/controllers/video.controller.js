@@ -83,14 +83,14 @@ const publishAVideo = asyncHandler(async (req, res) => {
     const { title, description} = req.body
     // TODO: get video, upload to cloudinary, create video
 
-    if (!(title || description)) {
+    if (!title || !description) {
       throw new ApiError(400, "Title and description are required");
     }
   
     const videoLocalPath = req.files?.videoFile?.[0]?.path;
     const thumbnailLocalPath = req.files?.thumbnail?.[0]?.path;
 
-    if (!(videoLocalPath || thumbnailLocalPath)) {
+    if (!videoLocalPath || !thumbnailLocalPath) {
       throw new ApiError(400, "Video and thumbnail are required");
     }
     
@@ -134,59 +134,75 @@ const publishAVideo = asyncHandler(async (req, res) => {
 })
 
 const getVideoById = asyncHandler(async (req, res) => {
-    const { videoId } = req.params
-    //TODO: get video by id
+  const { videoId } = req.params;
 
-    if (!isValidObjectId(videoId)) {
-        throw new ApiError(400, "Invalid video ID");
-    }
+  if (!isValidObjectId(videoId)) {
+    throw new ApiError(400, "Invalid video ID");
+  }
 
-    const video = await Video.aggregate([
-        {   $match: { 
-               _id: new mongoose.Types.ObjectId(videoId),
-               isPublished: true 
-            } 
+  const video = await Video.aggregate([
+    {
+      $match: {
+        _id: new mongoose.Types.ObjectId(videoId),
+        isPublished: true,
+      },
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "owner",
+        foreignField: "_id",
+        as: "ownerDetails",
+      },
+    },
+    {
+      $unwind: "$ownerDetails", // owner is a single user
+    },
+    {
+      $lookup: {
+        from: "likes",
+        localField: "_id",
+        foreignField: "video",
+        as: "likes",
+      },
+    },
+    {
+      $addFields: {
+        likesCount: { $size: "$likes" },
+      },
+    },
+    {
+      $project: {
+        title: 1,
+        description: 1,
+        videoFile: 1,
+        thumbnail: 1,
+        duration: 1,
+        views: 1,
+        isPublished: 1,
+        likesCount: 1,
+        owner: {
+          username: "$ownerDetails.username",
+          avatar: "$ownerDetails.avatar",
         },
-        {
-          $lookup: {
-            from: "likes",
-            localField: "_id",
-            foreignField: "video",
-            as: "likes"
-          }
-        },
-        {
-          $addFields: {
-            likesCount: { $size: "$likes" }
-          }
-        },
-        {
-           $project: {
-           title: 1,
-           description: 1,
-           videoFile: 1,
-           thumbnail: 1,
-           duration: 1,
-           views: 1,
-           isPublished: 1,
-           likesCount: 1,
-           owner: {
-             username: "$owner.username",
-             avatar: "$owner.avatar"
-           }
-         }
-        }
-    ]);
+      },
+    },
+  ]);
 
-    if (!video || video.length === 0) {
-        throw new ApiError(404, "Video not found");
-    }
+  console.log("Video aggregation result:", video);
+  if (video && video.length > 0) {
+    console.log("Likes count for video:", video[0].likesCount);
+  }
 
-    return res
+  if (!video || video.length === 0) {
+    throw new ApiError(404, "Video not found");
+  }
+
+  return res
     .status(200)
-    .json(new ApiResponse(200, video[0], "Video fetched successfully"))
+    .json(new ApiResponse(200, video[0], "Video fetched successfully"));
+});
 
-})
 
 const updateVideo = asyncHandler(async (req, res) => {
     const { videoId } = req.params

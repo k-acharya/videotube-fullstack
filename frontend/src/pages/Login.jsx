@@ -34,7 +34,7 @@ export default function Login() {
     <div className="min-h-screen bg-gray-900 flex items-center justify-center text-white px-4">
       <form
         onSubmit={handleLogin}
-        className="w-full max-w-md bg-gray-800 p-8 rounded-xl shadow-md space-y-6"
+        className="w-full max-w-md bg-teal-500 p-8 rounded-xl shadow-md space-y-6"
       >
         <h2 className="text-2xl font-bold text-center">Login to VideoTube</h2>
 
@@ -68,7 +68,7 @@ export default function Login() {
 
         <button
           type="submit"
-          className="w-full p-2 bg-red-600 hover:bg-red-700 rounded font-semibold"
+          className="w-36 p-2 bg-red-600 hover:bg-red-700 rounded font-semibold"
         >
           Login
         </button>

@@ -20,7 +20,7 @@ export default function Header() {
 
   return (
     <header className="flex justify-between items-center p-4 bg-gray-800 shadow">
-      <Link to="/" className="text-xl font-bold text-green-400">
+      <Link to="/" className="text-xl from-neutral-400 text-stone-200">
         VideoTube
       </Link>
 
@@ -28,8 +28,9 @@ export default function Header() {
         
         {authUser ? (
           <>
+            <Link to="/upload" className="hover:text-green-300">Upload</Link>
             <Link to="/history" className="hover:text-green-300">History</Link>
-            <Link to={`/channel/${authUser.username}`} className="hover:text-green-300">
+            <Link to="/profile" className="hover:text-green-300">
               {authUser.fullName}
             </Link>
             <button onClick={handleLogout} className="text-red-400 hover:text-red-300">

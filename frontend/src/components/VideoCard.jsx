@@ -6,8 +6,8 @@ function VideoCard({ video }) {
     <Link to={`/watch/${video._id}`}>
       <div className="rounded-lg overflow-hidden shadow-md hover:shadow-lg transition">
         <img src={video.thumbnail} alt={video.title} className="w-full" />
-        <div className="p-2">
-          <h3 className="text-white text-lg font-semibold truncate">
+        <div className="p-2 bg-slate-50">
+          <h3 className="text-slate-900 text-lg font-semibold truncate">
             {video.title}
           </h3>
           <p className="text-sm text-gray-400">{video.owner.username}</p>

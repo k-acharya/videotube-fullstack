@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axiosInstance from "../utils/axiosInstance";
 import VideoCard from "../components/VideoCard";
+import { FaPlayCircle } from "react-icons/fa";
 
 export default function Home() {
   const [videos, setVideos] = useState([]);
@@ -19,8 +20,13 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold text-white mb-4">Trending Videos</h1>
+    <div className="p-4 min-h-screen bg-teal-800">
+      
+      {/* Icon + Title */}
+      <div className="flex items-center gap-2 mb-4">
+        <FaPlayCircle size={28} color="white" />
+        <h1 className="text-2xl font-serif text-white">Trending Videos</h1>
+      </div>
 
       {videos.length === 0 ? (
         <p className="text-gray-400">No videos uploaded yet.</p>
