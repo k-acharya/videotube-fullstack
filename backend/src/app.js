@@ -9,13 +9,31 @@ const app = express()
 
 // CORS setup for dev and production
 const isProduction = process.env.NODE_ENV === "production";
-const frontendOrigin = process.env.CORS_ORIGIN || (isProduction ? "https://yourfrontenddomain.com" : "http://localhost:5173");
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://videotube-fullstack.vercel.app",
+  process.env.CORS_ORIGIN
+].filter(Boolean); // Remove any undefined values
 
 app.use(cors({
-  origin: frontendOrigin,
-  credentials: true
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      console.log("CORS blocked origin:", origin);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
 }));
-console.log("CORS Origin:", process.env.CORS_ORIGIN);
+
+console.log("Allowed CORS Origins:", allowedOrigins);
+console.log("CORS_ORIGIN from env:", process.env.CORS_ORIGIN);
 
 
 app.use(express.json({limit: "16kb"}))

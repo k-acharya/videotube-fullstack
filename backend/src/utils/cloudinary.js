@@ -5,7 +5,8 @@ import fs from 'fs'; //its file system and this comes with node.js for read, wri
 cloudinary.config({ 
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
     api_key: process.env.CLOUDINARY_API_KEY, 
-    api_secret: process.env.CLOUDINARY_API_SECRET // Click 'View API Keys' above to copy your API secret
+    api_secret: process.env.CLOUDINARY_API_SECRET, // Click 'View API Keys' above to copy your API secret
+    secure: true // Force HTTPS URLs
 });
 
 
@@ -15,7 +16,8 @@ const uploadOnCloudinary = async(localFilePath, resourceType = "auto") => {
         //upload the file on cloudinary
         const response = await cloudinary.uploader.upload(localFilePath, {
             resource_type: resourceType,
-            timeout: 120000 // ✅ [5] 2-minute timeout for large uploads        
+            timeout: 120000, // ✅ [5] 2-minute timeout for large uploads
+            secure: true // Force HTTPS URLs
         })
         //file has been uploaded successfully
         console.log("file is uploaded on cloudinary", response.url);
