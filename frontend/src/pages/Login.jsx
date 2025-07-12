@@ -16,15 +16,24 @@ export default function Login() {
     setError("");
 
     try {
-      await axiosInstance.post("/users/login", { email, password });
-
-      await fetchCurrentUser(); //  Proper context update
+      const loginResponse = await axiosInstance.post("/users/login", { email, password });
+      console.log("Login response:", loginResponse.data);
+      
+      // Set the user directly from login response
+      if (loginResponse.data?.data?.user) {
+        setAuthUser(loginResponse.data.data.user);
+        console.log("User set in context:", loginResponse.data.data.user);
+      } else {
+        console.error("No user data in login response");
+        // Fallback to fetching current user
+        await fetchCurrentUser();
+      }
       
       alert("Login successful!");
       navigate("/");
 
     } catch (err) {
-      console.error(err);
+      console.error("Login error:", err);
       setError(err?.response?.data?.message || "Login failed");
     }
   };

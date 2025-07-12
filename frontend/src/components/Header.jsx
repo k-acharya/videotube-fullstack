@@ -6,6 +6,8 @@ import axiosInstance from "../utils/axiosInstance";
 export default function Header() {
   const { authUser, setAuthUser } = useAuth(); // use context
   console.log("Header rendered — authUser:", authUser);
+  console.log("Header rendered — authUser type:", typeof authUser);
+  console.log("Header rendered — authUser keys:", authUser ? Object.keys(authUser) : "null");
   const navigate = useNavigate();
 
   const handleLogout = async () => {
