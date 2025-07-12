@@ -118,7 +118,7 @@ export default function Profile() {
                   isSubscribed ? "bg-gray-600 text-white" : "bg-green-600 text-white"
                 }`}
               >
-                {isSubscribed ? "Subscribed ✅" : "Subscribe"}
+                {isSubscribed ? "Subscribed " : "Subscribe"}
               </button>
             )}
           </>
