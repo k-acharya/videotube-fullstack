@@ -147,12 +147,11 @@ const loginUser = asyncHandler(async(req, res) => {
 
     // Dynamic cookie options for dev/prod
     const isProduction = process.env.NODE_ENV === "production";
-    const cookieDomain = isProduction ? process.env.COOKIE_DOMAIN || ".yourdomain.com" : "localhost";
     const options = {
       httpOnly: true,
       secure: isProduction,
       sameSite: isProduction ? "None" : "Lax",
-      domain: cookieDomain
+      // Remove domain setting to let browser handle it automatically
     };
 
     console.log(" Set-Cookie sent with accessToken:", accessToken);
@@ -189,11 +188,11 @@ const logoutUser = asyncHandler(async(req, res) => {
         }
     )
 
+    const isProduction = process.env.NODE_ENV === "production";
     const options = {
         httpOnly: true,
-        secure: false,
-        sameSite: "Lax",
-        domain: "localhost"
+        secure: isProduction,
+        sameSite: isProduction ? "None" : "Lax",
     }
 
     return res
