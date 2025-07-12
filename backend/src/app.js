@@ -12,6 +12,7 @@ const isProduction = process.env.NODE_ENV === "production";
 const allowedOrigins = [
   "http://localhost:5173",
   "https://videotube-fullstack.vercel.app",
+  "https://frontend-videotube.vercel.app",
   process.env.CORS_ORIGIN
 ].filter(Boolean); // Remove any undefined values
 
