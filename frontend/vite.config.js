@@ -6,7 +6,11 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/api': 'https://backend-videotube-oaq4.onrender.com'  // Proxy all /api requests to your backend
+      '/api': {
+        target: import.meta.env.VITE_API_BASE_URL?.replace('/api/v1', '') || 'https://backend-videotube-oaq4.onrender.com',
+        changeOrigin: true,
+        secure: true
+      }
     }
   }
 })
