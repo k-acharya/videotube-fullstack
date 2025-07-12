@@ -100,8 +100,11 @@ videotube-fullstack/
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/05890aad-d30e-45b9-988d-5c4b6600f8d6" width="420" />
-  <img src="https://github.com/user-attachments/assets/b50aff83-cc64-4990-918a-f1759d675410" width="420" />
 </p>
 
+## About Me
+Hi, I’m Kaberi Acharya, a B.Tech student at NIT Silchar.
+This project helped me understand real-world full-stack concepts like secure JWT authentication, file handling with Cloudinary, scalable backend design, and frontend state management.
 
+Thanks for checking it out!
 
