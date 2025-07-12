@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: import.meta.env.VITE_API_BASE_URL?.replace('/api/v1', '') || 'https://backend-videotube-oaq4.onrender.com',
+        target: (process.env.VITE_API_BASE_URL || 'https://backend-videotube-oaq4.onrender.com/api/v1').replace('/api/v1', ''),
         changeOrigin: true,
         secure: true
       }
