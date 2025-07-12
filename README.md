@@ -75,9 +75,12 @@ These may be added in the next versions of the project.
 ---
 
 ##  Folder Structure
+
 videotube-fullstack/
-── backend/ Express + MongoDB API
-── frontend/ React + Tailwind UI
+
+ ─ backend/ Express + MongoDB API
+
+ ─ frontend/ React + Tailwind UI
 ---
 ## ScreenShots
 
