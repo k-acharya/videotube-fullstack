@@ -83,12 +83,13 @@ videotube-fullstack/
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/2146e345-3770-4e8b-ae45-a06b67a15ae6" width="420" />
-  <img src="https://github.com/user-attachments/assets/36a1ac1a-10f6-4f4b-b398-c7be615cd453" width="420" />
+  <img width="420" src="https://github.com/user-attachments/assets/e0573f24-8139-4e09-b964-a1eb7aba5dd0" />
+
 </p>
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/d29fd7f9-3584-47ae-b55d-90992573f58a" width="420" />
-  <img src="https://github.com/user-attachments/assets/f029fde2-53b1-4db8-880f-f098a3fa2506" width="420" />
+
 </p>
 
 <p align="center">
